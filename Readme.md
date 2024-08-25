@@ -35,6 +35,7 @@ This document provides a detailed overview of each service defined in the Docker
   - Mailhog
   - MongoDB
   - Postgres
+  - RabbitMQ
   - Listener Service
   - Authentication Service
   - Logger Service
