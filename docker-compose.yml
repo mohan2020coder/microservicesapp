@@ -1,0 +1,141 @@
+version: '3.8'
+
+services:
+
+  broker-service:
+    build:
+      context: ./broker-service
+      dockerfile: ./broker-service.dockerfile
+    restart: always
+    ports:
+      - "8080:80"
+    deploy:
+      mode: replicated
+      replicas: 1
+    depends_on:
+      - rabbitmq
+
+  logger-service:
+    build:
+      context: ./logger-service
+      dockerfile: ./logger-service.dockerfile
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    depends_on:
+      - mongo
+
+  mailer-service:
+    build:
+      context: ./mail-service
+      dockerfile: ./mail-service.dockerfile
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      MAIL_DOMAIN: localhost
+      MAIL_HOST: mailhog
+      MAIL_PORT: 1025
+      MAIL_ENCRYPTION: none
+      MAIL_USERNAME: ""
+      MAIL_PASSWORD: ""
+      FROM_NAME: "Mohan Raj"
+      FROM_ADDRESS: mohan18.welcome@example.com
+    depends_on:
+      - mailhog
+
+  authentication-service:
+    build:
+      context: ./authentication-service
+      dockerfile: ./authentication-service.dockerfile
+    restart: always
+    ports:
+      - "8081:80"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      DSN: "host=postgres port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
+    depends_on:
+      - postgres
+
+  listener-service:
+    build:
+      context: ./listener-service
+      dockerfile: ./listener-service.dockerfile
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      LOG_SERVICE_URL: "http://logger-service/log"
+    depends_on:
+      - rabbitmq
+
+  postgres:
+    image: 'postgres:15.4'
+    ports:
+      - "5432:5432"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: users
+    volumes:
+      - ./db-data/postgres/:/var/lib/postgresql/data/
+
+  mongo:
+    image: 'mongo:6.0.3'
+    ports:
+      - "27017:27017"
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: logs
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ./db-data/mongo/:/data/db
+
+  mailhog:
+    image: 'mailhog/mailhog:v1.0.1'
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    restart: always
+
+  rabbitmq:
+    image: 'rabbitmq:3.11-alpine'
+    ports:
+      - "5672:5672"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    volumes:
+      - ./db-data/rabbitmq/:/var/lib/rabbitmq/
+
+  frontend-service:
+    build:
+      context: ./frontend
+      dockerfile: ./frontend-service.dockerfile
+    restart: always
+    ports:
+      - "80:3000"
+    deploy:
+      mode: replicated
+      replicas: 1
+    depends_on:
+      - rabbitmq
+      - mailhog
+      - mongo
+      - postgres
+      - listener-service
+      - authentication-service
+      - logger-service
+      - broker-service
+      - mailer-service
