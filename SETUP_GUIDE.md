@@ -64,3 +64,140 @@ docker-compose up --scale <service-name>=<number-of-instances>
 ```
 
 Replace <service-name> with the service you want to scale and <number-of-instances> with the desired number of replicas.
+
+
+
+##  Repository Structure
+
+```sh
+└── microservicesapp/
+    ├── Makefile
+    ├── Makefile.windows
+    ├── Readme.md
+    ├── SETUP_GUIDE.md
+    ├── architecture.png
+    ├── authentication-service
+    │   ├── .DS_Store
+    │   ├── authApp
+    │   ├── authentication-service.dockerfile
+    │   ├── cmd
+    │   │   ├── .DS_Store
+    │   │   └── api
+    │   │       ├── handlers.go
+    │   │       ├── helpers.go
+    │   │       ├── main.go
+    │   │       └── routes.go
+    │   ├── data
+    │   │   └── models.go
+    │   ├── go.mod
+    │   ├── go.sum
+    │   └── wait-for-it.sh
+    ├── broker-service
+    │   ├── .DS_Store
+    │   ├── broker-service.dockerfile
+    │   ├── brokerApp
+    │   ├── cmd
+    │   │   ├── .DS_Store
+    │   │   └── api
+    │   │       ├── handlers.go
+    │   │       ├── helpers.go
+    │   │       ├── main.go
+    │   │       └── routes.go
+    │   ├── event
+    │   │   ├── consumer.go
+    │   │   ├── emitter.go
+    │   │   └── event.go
+    │   ├── go.mod
+    │   ├── go.sum
+    │   └── logs
+    │       ├── logs.pb.go
+    │       ├── logs.proto
+    │       └── logs_grpc.pb.go
+    ├── demo.http
+    ├── docker-compose.yml
+    ├── frontend
+    │   ├── .eslintrc.json
+    │   ├── .gitignore
+    │   ├── README.md
+    │   ├── frontend-service.dockerfile
+    │   ├── next.config.mjs
+    │   ├── package-lock.json
+    │   ├── package.json
+    │   ├── pages
+    │   │   ├── _app.tsx
+    │   │   ├── _document.tsx
+    │   │   ├── api
+    │   │   │   └── hello.ts
+    │   │   └── index.tsx
+    │   ├── postcss.config.mjs
+    │   ├── public
+    │   │   ├── favicon.ico
+    │   │   ├── next.svg
+    │   │   └── vercel.svg
+    │   ├── styles
+    │   │   └── globals.css
+    │   ├── tailwind.config.ts
+    │   └── tsconfig.json
+    ├── k8s
+    │   ├── authentication.yml
+    │   ├── broker.yml
+    │   ├── front-end.yml
+    │   ├── listener.yml
+    │   ├── logger.yml
+    │   ├── mail.yml
+    │   ├── mailhog.yml
+    │   ├── mongo.yml
+    │   ├── postgres.yml
+    │   └── rabbit.yml
+    ├── listener-service
+    │   ├── .DS_Store
+    │   ├── cmd
+    │   │   └── api
+    │   │       └── main.go
+    │   ├── docker-compose.yml
+    │   ├── event
+    │   │   ├── consumer.go
+    │   │   └── event.go
+    │   ├── go.mod
+    │   ├── go.sum
+    │   ├── listener-service.dockerfile
+    │   ├── listenerApp
+    │   └── wait-for-it.sh
+    ├── logger-service
+    │   ├── cmd
+    │   │   └── api
+    │   │       ├── grpc.go
+    │   │       ├── handlers.go
+    │   │       ├── helpers.go
+    │   │       ├── main.go
+    │   │       ├── routes.go
+    │   │       └── rpc.go
+    │   ├── data
+    │   │   └── models.go
+    │   ├── go.mod
+    │   ├── go.sum
+    │   ├── logger-service.dockerfile
+    │   ├── loggerServiceApp
+    │   └── logs
+    │       ├── logs.pb.go
+    │       ├── logs.proto
+    │       └── logs_grpc.pb.go
+    └── mail-service
+        ├── .DS_Store
+        ├── cmd
+        │   └── api
+        │       ├── handlers.go
+        │       ├── helpers.go
+        │       ├── mailer.go
+        │       ├── main.go
+        │       └── routes.go
+        ├── go.mod
+        ├── go.sum
+        ├── mail-service.dockerfile
+        ├── mailerApp
+        └── templates
+            ├── mail.html.gohtml
+            └── mail.plain.gohtml
+```
+
+---

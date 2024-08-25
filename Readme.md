@@ -3,6 +3,9 @@
 
 This guide will walk you through the setup of a multi-service application using Docker Compose. The architecture involves several services that work together to create a fully functional application stack.
 
+
+
+
 ## Architecture Overview
 
 Here’s an overview of the services involved in the setup:
